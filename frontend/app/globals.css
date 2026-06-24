@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blueprint-950: #0B1E33;
+  --color-blueprint-900: #102A45;
+  --color-blueprint-800: #163A5C;
+  --color-blueprint-700: #1D4A73;
+  --color-blueprint-600: #28608F;
+  --color-blueprint-400: #5C95B8;
+  --color-blueprint-200: #AFD4E8;
+  --color-blueprint-100: #E2F1F8;
+
+  --color-signal-orange: #FF7A33;
+  --color-signal-amber: #F2B544;
+  --color-signal-red: #E8553F;
+  --color-signal-green: #3FB67F;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html,
+body {
+  background-color: var(--color-blueprint-950);
+  color: var(--color-blueprint-100);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--color-signal-orange);
+  color: var(--color-blueprint-950);
+}
+
+/* Confidence badge color scales */
+.confidence-high {
+  color: var(--color-signal-green);
+  border-color: rgba(63, 182, 127, 0.4);
+  background-color: rgba(63, 182, 127, 0.1);
+}
+
+.confidence-medium {
+  color: var(--color-signal-amber);
+  border-color: rgba(242, 181, 68, 0.4);
+  background-color: rgba(242, 181, 68, 0.1);
+}
+
+.confidence-low {
+  color: var(--color-signal-red);
+  border-color: rgba(232, 85, 63, 0.4);
+  background-color: rgba(232, 85, 63, 0.1);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}

@@ -1,0 +1,30 @@
+{
+  "stages_order": [
+    "Site Preparation",
+    "Foundation",
+    "Structural Works",
+    "Masonry",
+    "Roofing",
+    "MEP Rough-In",
+    "Finishing",
+    "External Works"
+  ],
+  "materials": [
+    {
+      "material_name": "Concrete",
+      "category": "Masonry",
+      "primary_stage": "Foundation",
+      "secondary_stage": "Structural Works",
+      "unit_hint": "cubic meters",
+      "aliases": ["ready mix", "cement", "pour"]
+    },
+    {
+      "material_name": "Rebar",
+      "category": "Structural",
+      "primary_stage": "Structural Works",
+      "secondary_stage": null,
+      "unit_hint": "tons",
+      "aliases": ["reinforcing bar", "steel bar", "tmt bar"]
+    }
+  ]
+}

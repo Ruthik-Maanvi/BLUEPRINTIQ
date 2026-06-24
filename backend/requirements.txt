@@ -1,0 +1,16 @@
+# --- Core API & Server ---
+fastapi
+uvicorn
+python-multipart
+pydantic-settings
+
+# --- Primary Extraction (Structured Documents) ---
+docling
+
+# --- Multi-Modal Vision Fallback (Images/Drawings) ---
+paddleocr
+paddlepaddle
+
+# --- Reasoning & DB Layer ---
+openai
+sqlalchemy

@@ -1,0 +1,67 @@
+[CLIENT] Next.js 16 SPA (Turbopack)
+   |
+   | HTTP POST /api/v1/upload
+   | Payload: multipart/form-data (Binary Stream)
+   v
++---------------------------------------------------------------------------------------+
+|  FASTAPI ASGI BOUNDARY & INGESTION NODE (`app/api/upload.py`)                         |
+|                                                                                       |
+|   1. SECURITY GATEWAY (`app/core/security.py`)                                        |
+|      -> `validate_upload()`: Validates extensions against cryptographic whitelist.    |
+|      -> `sanitize_filename()`: Strips path-traversal regex vectors (`../`).           |
+|      -> `enforce_size_limit()`: Blocks payloads > 50MB memory ceiling.                |
+|                                                                                       |
+|   * ACTION: Writes sanitized binary to local `uploads/{project_id}/` temp block.      |
++-------------------------------------------|-------------------------------------------+
+                                            |
+                                            | Trigger Analysis Task
+                                            v
++---------------------------------------------------------------------------------------+
+|  ROUTER ORCHESTRATOR (`app/api/analyze.py` -> `AnalyzeController`)                    |
+|                                                                                       |
+|   2. EXTRACTION ROUTING FORK (`app/services/document_extractor.py`)                   |
+|      Analyzes payload MIME type to determine pipeline execution:                      |
+|                                                                                       |
+|      [IF TEXT-PDF / BOQ FORMAT]                 [IF IMAGE / ARCHITECTURAL RASTER]     |
+|      -> Invoke: Primary Pipeline                -> Invoke: Local Vision Fallback      |
+|      -> Engine: IBM Docling Base Model          -> Engine: PaddleOCR (CPU mode)       |
+|      -> Config: `do_ocr = False`                -> Config: Layout structure mapping   |
+|      -> Config: `TableFormerMode.ACCURATE`      -> Fallback: Skips native text hunt   |
+|                 |                                          |                          |
+|                 +--------------------+---------------------+                          |
+|                                      |                                                |
+|                                      v (Yields Normalized Markdown/Text Matrix)       |
+|                                                                                       |
+|   3. DETERMINISTIC TAXONOMY ENGINE (`app/services/ontology_mapper.py`)                |
+|      -> Loads: `construction_ontology.json` (In-memory dict map)                      |
+|      -> Executes: `re.finditer(r"(?<![a-zA-Z0-9]){term}\b", text, re.IGNORECASE)`     |
+|      -> Output: Binds raw strings to explicit Procurement Stage IDs.                  |
+|                                      |                                                |
+|                                      v (Yields Mapped Material Nodes)                 |
+|                                                                                       |
+|   4. REASONING & CONFIDENCE BLENDING (`app/services/reasoning_engine.py`)             |
+|      -> Computes Mathematical Baseline:                                               |
+|         `score = (Ontology_W * 0.60) + (Extraction_W * 0.20)`                         |
+|      -> Generates Grounding Citation: Logs Page # and Context Window.                 |
+|                                      |                                                |
+|                                      v                                                |
+|                                                                                       |
+|   5. LLM SYNTHESIS & GRACEFUL DEGRADATION (`app/api/analyze.py`)                      |
+|      -> `try:` Initialize async OpenAI/Groq REST call with context prompt.            |
+|      -> `except RateLimitError:` Drop network task, activate graceful degradation.    |
+|      -> *Fallback State:* Set `llm_grounded=False`, rely purely on internal math.     |
++-------------------------------------------|-------------------------------------------+
+                                            |
+                                            | Maps variables to Pydantic Response Schema
+                                            v
++---------------------------------------------------------------------------------------+
+|  PERSISTENCE & DATA CONTRACT LAYER (`app/core/database.py`)                           |
+|                                                                                       |
+|   6. SQLALCHEMY ORM COMMIT                                                            |
+|      -> Maps Pydantic `ProcurementPlan` into SQLite declarative base tables.          |
+|      -> Commits active session: `db.commit()`                                         |
++-------------------------------------------|-------------------------------------------+
+                                            |
+                                            | HTTP 200 OK (Application/JSON)
+                                            v
+[CLIENT] Redux / React Query State Update -> Renders Dashboard Tables
