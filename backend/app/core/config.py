@@ -54,7 +54,7 @@ class Settings(BaseSettings):
 
     # --- Application Security Boundaries ---
     APP_NAME: str = "BlueprintIQ"
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: list[str] = ["http://localhost:3000, "https://blueprintiq-git-main-ruthik-maanvis-projects.vercel.app","]
     MAX_UPLOAD_MB: int = 50
     LOG_LEVEL: str = "info"
 
