@@ -51,14 +51,19 @@ class Settings(BaseSettings):
     # Bypassing the default Pydantic JSON parser prevents JSONDecodeErrors 
     # when reading environment variables in a Windows execution context.
     DOCLING_OCR_LANG: str = "en"
-
     # --- Application Security Boundaries ---
+
     APP_NAME: str = "BlueprintIQ"
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "https://blueprintiq-git-main-ruthik-maanvis-projects.vercel.app"]
     MAX_UPLOAD_MB: int = 50
     LOG_LEVEL: str = "info"
 
-    # Automatically load from .env and ignore stray variables
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:3000", 
+        "http://127.0.0.1:3000",
+        "https://blueprintiq-beta.vercel.app",
+        "https://blueprintiq-git-main-ruthik-maanvis-projects.vercel.app",
+    ]
+    # Automatically load from .env and ignore   stray variables
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
