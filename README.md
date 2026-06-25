@@ -81,15 +81,6 @@ Now we will install the machine learning libraries (this may take a few minutes 
 Ensure you are in the backend directory:
 Bash
 # You should be in blueprintiq/backend
-Open your backend/requirements.txt file and ensure these lines are explicitly listed at the bottom so your local text-extraction fallback environment initializes without throwing any module missing errors:
-
-Plaintext
-# --- Document Intelligence & Layout Engines ---
-docling
-
-# --- Vision Fallback Core Stack ---
-paddlepaddle
-paddleocr
 
 Install Python Dependencies:
 Bash
