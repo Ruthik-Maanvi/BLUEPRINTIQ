@@ -11,7 +11,7 @@ import type {
   UploadResponse,
 } from "@/types/material";
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://blueprintiq-api.onrender.com";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 class ApiError extends Error {
   status: number;
   constructor(message: string, status: number) {
